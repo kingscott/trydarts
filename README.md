@@ -1,4 +1,4 @@
 # try.darts
 Live demo version of this simple darts game.
 
-[Sreenshot of game](<img src="screen.png">)
+<img src="https://raw.githubusercontent.com/kingscott/trydarts/gh-pages/screeny.png">
