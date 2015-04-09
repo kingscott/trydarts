@@ -4,4 +4,6 @@
 
 Live demo version of this simple darts game. <br />
 
-<img style="float: center" src="screeny.png" />
+<div style="text-align: center" markdown="1">
+  ![screenshot](screeny.png)
+</div>
