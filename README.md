@@ -1,2 +1,2 @@
-# trydarts
-Pages site for SimpleDarts.
+# try.darts
+Live demo version of this simple darts game. 

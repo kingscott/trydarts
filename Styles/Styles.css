@@ -1,0 +1,24 @@
+div.fntStyle {
+  font-family:Calibri;
+  font-size:12pt;
+  text-align:center;
+}
+    
+td.funStyle { 
+    background-color:White;
+    border:solid black 1px;
+    width:600px;
+    height:110px;
+    border-radius:5px;
+}   
+         
+table.tblStyle {
+    background-color:White;
+    border:solid #3EBD37 5px;
+    border-radius:5px;
+}
+    
+
+    
+    
+

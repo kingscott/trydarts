@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Bullseye Game!</title>
+    <script src="Javascript/jquery.min.js" type="text/javascript"></script>
+    <script src="Javascript/jquery-ui.min.js" type="text/javascript"></script>
+     <link rel="Stylesheet" href="Styles/Styles.css" type="text/css" />
+
+    <script type="text/javascript">
+
+        var points;
+        var shots;
+        var windX, windY, windSpeed;
+
+        $(document).ready(function() {
+            alert("The bullseye is considered (225, 225).");
+            DrawCanvas();
+            $("#txtX").click(Click_Clear1);
+            $("#btnDart").click(ThrowDart);
+            points = 0;
+            shots = 3;
+            windX = 0;
+            windY = 0;
+            windSpeed = 0;
+            GenerateWind();
+            DrawWind(windX, windY, windSpeed);
+
+        });
+        function DrawCanvas() {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+
+            c = document.getElementById("myCanvas");
+            ctx = c.getContext("2d");
+            grd = ctx.createLinearGradient(0, 0, 175, 50);
+            grd.addColorStop(0, "Purple");
+            grd.addColorStop(1, "Orange");
+            ctx.fillStyle = grd;
+            ctx.fillRect(0, 0, 450, 450);
+
+            //Circle10
+            ctx.fillStyle = "Red";
+            ctx.beginPath();
+            //parameters -> centerX, centerY, radius, startAngle, endAngle, clockwise
+            ctx.arc(225, 225, 200, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            //Circle20
+            ctx.fillStyle = "Orange";
+            ctx.beginPath();
+            ctx.arc(225, 225, 165, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            //Circle30
+            ctx.fillStyle = "Yellow";
+            ctx.beginPath();
+            ctx.arc(225, 225, 130, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            //Circle40
+            ctx.fillStyle = "Green";
+            ctx.beginPath();
+            ctx.arc(225, 225, 95, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            //Circle50
+            ctx.fillStyle = "Blue";
+            ctx.beginPath();
+            ctx.arc(225, 225, 60, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            //Circle60
+            ctx.fillStyle = "Indigo";
+            ctx.beginPath();
+            ctx.arc(225, 225, 25, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("60", 230, 220);
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("50", 265, 220);
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("40", 300, 220);
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("30", 335, 220);
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("20", 370, 220);
+
+            ctx.fillStyle = "black";
+            ctx.font = "bold 15px sans-serif";
+            ctx.textBaseline = "top";
+            ctx.fillText("10", 405, 220);
+        }
+        function GenerateWind() {
+            var windSpeedRange = 10;    //Increase this variable to make the game harder
+            var windRadius = 15;
+            var windAngle = Math.random() * 2 * Math.PI;
+
+            windX = windRadius * Math.cos(windAngle);
+            windY = windRadius * Math.sin(windAngle);
+            windSpeed = Math.round(Math.random() * windSpeedRange * 10) / 10;
+        }
+        function DrawWind(windX, windY, windSpeed) {
+            //Refernece to canvas
+            var cWind = document.getElementById("cvsWind");
+            var ctxWind = cWind.getContext("2d");
+
+            //Wind properties
+            var windX1 = 20;
+            var windY1 = 20;
+            var windX2 = windX1 + windX;
+            var windY2 = windY1 + windY;
+
+            //Resent wind canvas
+            cWind.width = cWind.width;
+
+            //Draw line
+            ctxWind.fillStyle = "black";
+            ctxWind.moveTo(windX1, windY1);
+            ctxWind.lineTo(windX2, windY2);
+            ctxWind.stroke();
+
+            //Draw start dot
+            ctxWind.fillStyle = "black";
+            ctxWind.beginPath();
+            ctxWind.arc(windX1, windY1, 3, 0, Math.PI * 2, true);
+            ctxWind.closePath();
+            ctxWind.fill();
+
+            //Draw end dot
+            ctxWind.fillStyle = "red";
+            ctxWind.beginPath();
+            ctxWind.arc(windX2, windY2, 2, 0, Math.PI * 2, true);
+            ctxWind.closePath();
+            ctxWind.fill();
+
+            //Draw speed
+            ctxWind.fillStyle = "black";
+            ctxWind.font = '10px sans-serif';
+            ctxWind.fillText("Speed", 5, 55);
+            ctxWind.fillText(windSpeed, 12, 70);
+        }
+        function Click_Clear1() {
+            var clear = $("#txtX").val("");
+            var clear = $("#txtY").val("");
+        }
+        function ThrowDart() {
+            var x = parseFloat($("#txtX").val());
+            var y = parseFloat($("#txtY").val());
+
+            if (x, y >= 450 && x, y <= 0) {
+                alert("You cannot throw into the wall");
+            }
+
+            x = x + (windX * windSpeed);
+            y = y + (windY * windSpeed);
+
+            DrawDart(x, y);
+
+            points = points + GetPoints(x, y);
+            $("#lblPoints").text(points);
+
+            shots = shots - 1;
+            $("#lblShots").text(shots);
+
+            if (shots == 0) {
+                if (points == 180) {
+                    alert("Game over. Your score is " + points + ". You are a perfect shooter! You are OP.");
+                }
+                else if (points >= 150) {
+                    alert("Game over. Your score is " + points + ". You are a great shooter!");
+                }
+                else if (points >= 120) {
+                    alert("Game over. Your score is " + points + ". You are a good shooter.");
+                }
+                else if (points >= 90) {
+                    alert("Game over. Your score is " + points + ". You are an average shooter.");
+                }
+                else if (points >= 60) {
+                    alert("Game over. Your score is " + points + ". You aren't very good at this game.");
+                }
+                else if (points >= 30) {
+                    alert("Game over. Your score is " + points + ". You should stop playing this game, you aren't very good. It's hard to get that score.");
+                }
+                else if (points >= 0) {
+                    alert("Game over. You should stop playing.");
+                }
+                ClearAll();
+            }
+
+            GenerateWind();
+            DrawWind(windX, windY, windSpeed);
+
+        }
+        function DrawDart(x, y) {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            //parameters -> centerX, centerY, radius, startAngle, endAngle, clockwise
+            ctx.arc(eval(x), eval(y), 10, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        function GetPoints(x, y) {
+            var circle60 = CheckCircle(x, y, 225, 225, 25);
+            var circle50 = CheckCircle(x, y, 225, 225, 60);
+            var circle40 = CheckCircle(x, y, 225, 225, 95);
+            var circle30 = CheckCircle(x, y, 225, 225, 130);
+            var circle20 = CheckCircle(x, y, 225, 225, 165);
+            var circle10 = CheckCircle(x, y, 225, 225, 200);
+
+            if (circle60 == true) {
+                return 60;
+            }
+            else if (circle50 == true) {
+                return 50;
+            }
+            else if (circle40 == true) {
+                return 40;
+            }
+            else if (circle30 == true) {
+                return 30;
+            }
+            else if (circle20 == true) {
+                return 20;
+            }
+            else if (circle10 == true) {
+                return 10;
+            }
+            else {
+                return 0;
+            }
+        }
+        function CheckCircle(x, y, circleX, circleY, circleRadius) {
+            dis = Math.sqrt(Math.pow((x - circleX), 2) + Math.pow((y - circleY), 2));
+
+            if (dis > circleRadius) {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
+        function ClearAll() {
+
+            var clear = $("#txtX").val("");
+            var clear = $("#txtY").val("");
+            var clear = $("#lblPoints").text("0");
+            var clear = $("#lblShots").text("3");
+            points = 0;
+            shots = 3;
+            DrawCanvas();
+        }
+
+    </script>
+</head>
+<body bgcolor="white">
+    <div>
+        <div>
+        <div class="fntStyle">
+            <center><table class="tblStyle">
+                        <tr>
+                            <td class="tblStyle">
+                                <canvas id="myCanvas" width="450" height="450"></canvas><br />
+                                <canvas id="cvsWind" width="40" height="80" style="border:1px solid #c3c3c3;"></canvas>&nbsp;&nbsp;&nbsp;
+                                Points: <label id="lblPoints">0</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Shots Left: <label id="lblShots">3</label><br />
+                                <input id="txtX" type="text" value="Enter X Value Here..." />
+                                <input id="txtY" type="text" value="Enter Y Value Here..." />
+                                <input id="btnDart" type="button" value="Shoot" /><br />
+                                <h2>Points</h2>
+                                <ul>Red: 10 points</ul>
+                                <ul>Orange: 20 points</ul>
+                                <ul>Yellow: 30 points</ul>
+                                <ul>Green: 40 points</ul>
+                                <ul>Blue: 50 points</ul>
+                                <ul>Purple: 60 points</ul>
+                            </td>
+                        </tr>
+                    </table>
+                </center>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
